@@ -108,9 +108,10 @@ class GetNagiosHoststatus(Component):
         # clean方法返回的数据可通过组件的form_data属性获取
         def clean(self):
             data = self.cleaned_data
-            return {
-                'ApiKey': data['api_key'],
-            }
+            return data
+            # return {
+            #     'ApiKey': data['api_key'],
+            # }
 
     # 组件处理入口
     def handle(self):
@@ -125,7 +126,7 @@ class GetNagiosHoststatus(Component):
             response = self.outgoing.http_client.get(
                 host=configs.host,
                 path='/nagiosxi/api/v1/objects/hoststatus/',
-                params={'apikey':data['ApiKey']}
+                params=data
             )
             result_json = {
                 "result": True,

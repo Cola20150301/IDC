@@ -124,24 +124,24 @@ class GetNagiosHoststatus(Component):
         try:
             response = self.outgoing.http_client.get(
                 host=configs.host,
-                path='/nagiosxi/api/v1/objects/hoststatus/?apikey=%s'%data['ApiKey']
+                path='/nagiosxi/api/v1/objects/hoststatus/',
+                params={'apikey':data['ApiKey']}
             )
-        except Exception,e:
+            result_json = {
+                "result": True,
+                "data": response,
+                "message": u"第三方接口调用成功",
+            }
+        except Exception, e:
             # TODO: 需要删除，仅用于测试的假数据
-            print 'po'
+            print 'nagios get error %s' % e
 
-        # 对结果进行解析
-        code = str(response['code'])
-        if code == '0':
-            result = {
-                'result': True,
-                'data': response['data'],
+            result_json = {
+                "result": False,
+                "data": {},
+                "message": u"第三方接口调用失败",
             }
-        else:
-            result = {
-                'result': False,
-                'message': result['extmsg']
-            }
+
 
         # 设置组件返回结果，payload为组件实际返回结果
-        self.response.payload = result
+        self.response.payload = result_json

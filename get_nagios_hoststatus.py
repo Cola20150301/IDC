@@ -128,6 +128,7 @@ class GetNagiosHoststatus(Component):
                 # path='/nagiosxi/api/v1/objects/hoststatus/',
                 host = '127.0.0.1:8888',
                 path = '',
+                
                 params=data
             )
             result_json = {

@@ -123,12 +123,13 @@ class GetNagiosHoststatus(Component):
 
         # 请求接口
         try:
+            data.update(self.request.kwargs)
             response = self.outgoing.http_client.get(
                 # host=configs.host,
                 # path='/nagiosxi/api/v1/objects/hoststatus/',
                 host = '127.0.0.1:8888',
                 path = '',
-                
+
                 params=data
             )
             result_json = {

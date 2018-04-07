@@ -13,6 +13,7 @@ from django import forms
 from common.forms import BaseComponentForm
 from components.component import Component
 from .toolkit import configs
+import requests
 
 class GetNagiosHoststatus(Component):
     """
@@ -130,16 +131,16 @@ class GetNagiosHoststatus(Component):
 
         # 请求接口
         try:
-            data.update(self.request.kwargs)
-            response = self.outgoing.http_client.get(
-                host=configs.host,
-                path='/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']),
-                # data=json.dumps(data)
-            )
+            # response = self.outgoing.http_client.get(
+            #     host=configs.host,
+            #     path='/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']),
+            #     # data=json.dumps(data)
+            # )
+            response = requests.get('http://' + configs.host + '/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']))
             result = {
                 "result": True,
                 "code": 0,
-                "data": response,
+                "data": response.json(),
                 "message": "",
             }
         except Exception, e:

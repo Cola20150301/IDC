@@ -104,6 +104,7 @@ class GetNagiosHoststatus(Component):
     # Form处理参数校验
     class Form(BaseComponentForm):
         api_key = forms.CharField(label=u'授权码', required=True)
+        host_id = forms.CharField(label=u'实例ID')
 
         # clean方法返回的数据可通过组件的form_data属性获取
         def clean(self):
@@ -123,30 +124,26 @@ class GetNagiosHoststatus(Component):
 
         # 请求接口
         try:
-            data.update(self.request.kwargs)
             response = self.outgoing.http_client.get(
-                # host=configs.host,
-                # path='/nagiosxi/api/v1/objects/hoststatus/',
-                host = '127.0.0.1:8888',
-                path = '',
-
+                host=configs.host,
+                path='/nagiosxi/api/v1/objects/hoststatus/',
                 params=data
             )
-            result_json = {
+            result = {
                 "result": True,
+                "code": 0,
                 "data": response,
-                "message": u"第三方接口调用成功",
+                "message": "",
             }
         except Exception, e:
             # TODO: 需要删除，仅用于测试的假数据
-            print 'nagios get error %s' % e
 
-            result_json = {
+            result = {
                 "result": False,
+                "code": 1,
                 "data": {},
-                "message": u"第三方接口调用失败",
+                "message": u"第三方接口调用失败: %s" % e,
             }
 
-
         # 设置组件返回结果，payload为组件实际返回结果
-        self.response.payload = result_json
+        self.response.payload = result

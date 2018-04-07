@@ -116,10 +116,11 @@ class GetNagiosHoststatus(Component):
         # clean方法返回的数据可通过组件的form_data属性获取
         def clean(self):
             data = self.cleaned_data
-            return data
-            # return {
-            #     'ApiKey': data['api_key'],
-            # }
+            # return data
+            return {
+                'api_key': data['api_key'],
+                'host_id': data['host_id'],
+            }
 
     # 组件处理入口
     def handle(self):
@@ -131,16 +132,16 @@ class GetNagiosHoststatus(Component):
 
         # 请求接口
         try:
-            # response = self.outgoing.http_client.get(
-            #     host=configs.host,
-            #     path='/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']),
-            #     # data=json.dumps(data)
-            # )
-            response = requests.get('http://10.160.148.38' + '/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']))
+            response = self.outgoing.http_client.get(
+                host=configs.host,
+                path='/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']),
+                params=data
+            )
+            # response = requests.get('http://10.160.148.38' + '/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']))
             result = {
                 "result": True,
                 "code": 0,
-                "data": response.json(),
+                "data": response,
                 "message": "",
             }
         except Exception, e:

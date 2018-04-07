@@ -136,7 +136,7 @@ class GetNagiosHoststatus(Component):
             #     path='/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']),
             #     # data=json.dumps(data)
             # )
-            response = requests.get('http://' + configs.host + '/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']))
+            response = requests.get('http://10.160.148.38' + '/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']))
             result = {
                 "result": True,
                 "code": 0,

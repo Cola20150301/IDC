@@ -133,8 +133,8 @@ class GetNagiosHoststatus(Component):
             data.update(self.request.kwargs)
             response = self.outgoing.http_client.get(
                 host=configs.host,
-                path='/nagiosxi/api/v1/objects/hoststatus/',
-                data=json.dumps(data)
+                path='/nagiosxi/api/v1/objects/hoststatus/?api_key=%s&host_id=%s'%(data['api_key'],data['host_id']),
+                # data=json.dumps(data)
             )
             result = {
                 "result": True,

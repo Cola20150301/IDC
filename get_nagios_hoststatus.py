@@ -1,4 +1,11 @@
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# @Time    : 2018/4/7 10:07
+# @Author  : Cola
+# @Site    : 
+# @File    : get.py
+# @Software: PyCharm
+
 import json
 
 from django import forms
@@ -6,7 +13,6 @@ from django import forms
 from common.forms import BaseComponentForm
 from components.component import Component
 from .toolkit import configs
-
 
 class GetNagiosHoststatus(Component):
     """
@@ -124,10 +130,11 @@ class GetNagiosHoststatus(Component):
 
         # 请求接口
         try:
+            data.update(self.request.kwargs)
             response = self.outgoing.http_client.get(
                 host=configs.host,
                 path='/nagiosxi/api/v1/objects/hoststatus/',
-                params=data
+                data=json.dumps(data)
             )
             result = {
                 "result": True,
@@ -144,6 +151,7 @@ class GetNagiosHoststatus(Component):
                 "data": {},
                 "message": u"第三方接口调用失败: %s" % e,
             }
+
 
         # 设置组件返回结果，payload为组件实际返回结果
         self.response.payload = result
